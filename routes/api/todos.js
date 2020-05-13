@@ -1,4 +1,5 @@
 const express = require('express');
+const uuid = require('uuid');
 const router = express.Router();
 const todos = require('../../Todos');
 
@@ -7,18 +8,18 @@ router.get('/todos', (req, res) => res.json(todos));
 router.get('/health', (req, res) => res.json(todos));
 
 // Get Single Task
-router.get('todos/:id', (req, res) => {
-    const found = todos.some(todo => todo.id === parseInt(req.params.id));
+router.get('/todos/:id', (req, res) => {
+    const found = todos.some(todo => todo.id === req.params.id);
 
     if (found) {
-        res.json(todos.filter(todo => todo.id === parseInt(req.params.id)));
+        res.json(todos.filter(todo => todo.id === req.params.id));
     } else {
         res.status(400).json({ msg: `No todo with the id of ${req.params.id}` });
     }
 });
 
 // Create Task
-router.post('todos/', (req, res) => {
+router.post('/todos', (req, res) => {
     const newTodo = {
         id: uuid.v4(),
         title: req.body.title
@@ -33,15 +34,14 @@ router.post('todos/', (req, res) => {
 });
 
 // Update Task
-router.patch('todos/:id', (req, res) => {
-    const found = todos.some(todo => todo.id === parseInt(req.params.id));
+router.patch('/todos/:id', (req, res) => {
+    const found = todos.some(todo => todo.id === req.params.id);
 
     if (found) {
         const updatedTodo = req.body;
         todos.forEach(todo => {
-            if (todo.id === parseInt(req.params.id)) {
+            if (todo.id === req.params.id) {
                 todo.title = updatedTodo.title ? updatedTodo.title : todo.title;
-
                 res.json({ msg: 'Todo updated', todo });
             }
         });
@@ -51,11 +51,12 @@ router.patch('todos/:id', (req, res) => {
 });
 
 // Delete Task
-router.delete('todos/:id', (req, res) => {
-    const found = todos.some(todo => todo.id === parseInt(req.params.id));
+router.delete('/todos/:id', (req, res) => {
+    const found = todos.some(todo => todo.id === req.params.id);
 
     if (found) {
-        res.json({ msg: 'Todo deleted', todos: todos.filter(todo => todo.id !== parseInt(req.params.id)) });
+        let removeIndex = todos.map(todo => todo.id).indexOf(req.params.id);
+        res.json({ msg: 'Todo deleted', todos: todos.splice(removeIndex, 1) });
     } else {
         res.status(400).json({ msg: `No todo with the id of ${req.params.id}` });
     }
