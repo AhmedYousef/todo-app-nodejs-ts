@@ -1,15 +1,18 @@
 const todos = [
     {
         id: "1",
-        title: 'buy the milk'
+        test: 'buy the milk',
+        isCompleted: false
     },
     {
         id: "2",
-        title: 'rent a car'
+        text: 'rent a car',
+        isCompleted: false
     },
     {
         id: "3",
-        title: 'feed the cat'
+        text: 'feed the cat',
+        isCompleted: false
     }
 ];
 

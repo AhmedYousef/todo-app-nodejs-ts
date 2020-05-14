@@ -10,18 +10,29 @@ const logReqAndRes = (req, res) => {
     logger.info('/ Response', res);
 };
 
+const validateCSRFToken = (req, res) => {
+    // console.log(req.csrfToken());
+    // if (!req.csrfToken()) {
+    //     return res.status(400).json({ msg: 'CSRF Token does NOT exist' });
+    // }
+};
+
 // Get All Tasks
 router.get('/todos', (req, res) => {
-    res.json(todos);
+    validateCSRFToken(req, res);
     logReqAndRes(req, todos);
+    // console.log(req.csrfToken());
+    // console.log(req.headers);
+    res.json(todos);
 });
+
 router.get('/health', (req, res) => {
     res.json(todos);
-    logReqAndRes(req, todos);
 });
 
 // Get Single Task
 router.get('/todos/:id', (req, res) => {
+    validateCSRFToken(req, res);
     const found = todos.some(todo => todo.id === req.params.id);
 
     if (found) {
@@ -35,13 +46,15 @@ router.get('/todos/:id', (req, res) => {
 
 // Create Task
 router.post('/todos', (req, res) => {
+    validateCSRFToken(req, res);
     const newTodo = {
         id: uuid.v4(),
-        title: req.body.title
+        text: req.body.text,
+        isCompleted: false
     }
 
-    if (!newTodo.title) {
-        return res.status(400).json({ msg: 'Please include a title' });
+    if (!newTodo.text) {
+        return res.status(400).json({ msg: 'Please include a text' });
     }
 
     todos.push(newTodo);
@@ -51,13 +64,15 @@ router.post('/todos', (req, res) => {
 
 // Update Task
 router.patch('/todos/:id', (req, res) => {
+    validateCSRFToken(req, res);
     const found = todos.some(todo => todo.id === req.params.id);
 
     if (found) {
         const updatedTodo = req.body;
         todos.forEach(todo => {
             if (todo.id === req.params.id) {
-                todo.title = updatedTodo.title ? updatedTodo.title : todo.title;
+                todo.text = updatedTodo.text ? updatedTodo.text : todo.text;
+                todo.isCompleted = updatedTodo.isCompleted ? updatedTodo.isCompleted : todo.isCompleted;
                 res.json({ msg: 'Todo updated', todo });
                 logReqAndRes(req, todo);
             }
@@ -69,6 +84,7 @@ router.patch('/todos/:id', (req, res) => {
 
 // Delete Task
 router.delete('/todos/:id', (req, res) => {
+    validateCSRFToken(req, res);
     const found = todos.some(todo => todo.id === req.params.id);
 
     if (found) {
