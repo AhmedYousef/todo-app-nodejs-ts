@@ -11,6 +11,7 @@ const logReqAndRes = (req, res) => {
 };
 
 const validateCSRFToken = (req, res) => {
+    // Facing "ForbiddenError: invalid csrf token"
     // console.log(req.csrfToken());
     // if (!req.csrfToken()) {
     //     return res.status(400).json({ msg: 'CSRF Token does NOT exist' });
@@ -21,8 +22,6 @@ const validateCSRFToken = (req, res) => {
 router.get('/todos', (req, res) => {
     validateCSRFToken(req, res);
     logReqAndRes(req, todos);
-    // console.log(req.csrfToken());
-    // console.log(req.headers);
     res.json(todos);
 });
 
@@ -58,7 +57,7 @@ router.post('/todos', (req, res) => {
     }
 
     todos.push(newTodo);
-    res.json(todos);
+    res.json(newTodo);
     logReqAndRes(req, todos);
 });
 
