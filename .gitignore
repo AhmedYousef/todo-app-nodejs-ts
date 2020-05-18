@@ -5,5 +5,9 @@ npm-debug.log
 .env
 .DS_Store
 logs.json
+<<<<<<< HEAD
 .vscode
 /public
+=======
+.vscode/
+>>>>>>> 0310fa7028f1726a39db5562e180f948d9c67adc
