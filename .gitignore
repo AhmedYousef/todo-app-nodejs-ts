@@ -6,8 +6,13 @@ npm-debug.log
 .DS_Store
 logs.json
 <<<<<<< HEAD
+<<<<<<< HEAD
 .vscode
 /public
 =======
 .vscode/
 >>>>>>> 0310fa7028f1726a39db5562e180f948d9c67adc
+=======
+.vscode/
+/public
+>>>>>>> develop
